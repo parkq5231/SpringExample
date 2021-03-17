@@ -15,18 +15,19 @@ import com.company.temp.common.BankAPI;
 
 @Controller
 public class BankController {
-	String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIxMTAwNzcwNTM2Iiwic2NvcGUiOlsiaW5xdWlyeSIsImxvZ2luIiwidHJhbnNmZXIiXSwiaXNzIjoiaHR0cHM6Ly93d3cub3BlbmJhbmtpbmcub3Iua3IiLCJleHAiOjE2MjMyMDQzNjQsImp0aSI6ImEwNTVkN2EyLTM0ZGUtNDM2NC1iYTU0LTJkYzZmNTdiOWQzNSJ9.ZqWH0G8gzViSUf7DdNHVF2YDH7m21Kkd4X74-Y0ObNw";
+	String org_access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJNMjAyMTExNjc5Iiwic2NvcGUiOlsib29iIl0sImlzcyI6Imh0dHBzOi8vd3d3Lm9wZW5iYW5raW5nLm9yLmtyIiwiZXhwIjoxNjIzMzA2NTcxLCJqdGkiOiJhNGZlNmVhNC02ZTIxLTQyOGMtYmE4OC0xMmJmOGVkNzhlMjUifQ.2XEjjmT1-5IFIXn_vC-yAnJ72LB2JyXkAffwefgtg4k";
 	@Autowired
 	BankAPI bankAPI;
 
-	//실명확인
+	// 실명확인
 	@RequestMapping("/getRealName")
 	public List<String> getRealName(HttpSession session, Model model) throws Exception {
 		List<String> list = new ArrayList<String>();
 		String user_num = "1100770536";
-		Map<String, Object> map = bankAPI.getRealName(access_token, user_num);
+		Map<String, Object> map = bankAPI.getRealName(org_access_token);
 		System.out.println("map값 확인용" + map);
 		List<String> result = (List<String>) map.get("account_holder_name");
+		System.out.println("값: " + result);
 		for (String name : result) {
 			list.add(name);
 		}
