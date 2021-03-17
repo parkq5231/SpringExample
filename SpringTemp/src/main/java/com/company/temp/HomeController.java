@@ -30,7 +30,7 @@ public class HomeController {
 
 	@Autowired
 	ProductService service;
-
+	
 	@Autowired
 	SaleService saleservice;
 
