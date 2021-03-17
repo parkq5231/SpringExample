@@ -4,32 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.company.temp.common.BankAPI;
 
 @Controller
 public class BankController {
-	String access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIxMTAwNzcwNTM2Iiwic2NvcGUiOlsiaW5xdWlyeSIsImxvZ2luIiwidHJhbnNmZXIiXSwiaXNzIjoiaHR0cHM6Ly93d3cub3BlbmJhbmtpbmcub3Iua3IiLCJleHAiOjE2MjMyMDQzNjQsImp0aSI6ImEwNTVkN2EyLTM0ZGUtNDM2NC1iYTU0LTJkYzZmNTdiOWQzNSJ9.ZqWH0G8gzViSUf7DdNHVF2YDH7m21Kkd4X74-Y0ObNw";
+	String org_access_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJNMjAyMTExNjc5Iiwic2NvcGUiOlsib29iIl0sImlzcyI6Imh0dHBzOi8vd3d3Lm9wZW5iYW5raW5nLm9yLmtyIiwiZXhwIjoxNjIzMzA2NTcxLCJqdGkiOiJhNGZlNmVhNC02ZTIxLTQyOGMtYmE4OC0xMmJmOGVkNzhlMjUifQ.2XEjjmT1-5IFIXn_vC-yAnJ72LB2JyXkAffwefgtg4k";
 	@Autowired
 	BankAPI bankAPI;
 
-	@RequestMapping("/getAccountList")
-	public List<String> getAccountList(HttpSession session, Model model) throws Exception {
+	// 실명확인
+	@RequestMapping("/getRealName")
+	@ResponseBody
+	public String getRealName(HttpSession session, Model model, HttpServletResponse response) throws Exception {
+		response.setContentType("text/html; charset=utf-8");
 		List<String> list = new ArrayList<String>();
-		String user_num = "1100770536";
-		Map<String, Object> map = bankAPI.getAccountList(access_token, user_num);
-		System.out.println("map값 확인용" + map);
-		List<String> result = (List<String>) map.get("user_name");
-		for (String name : result) {
-			list.add(name);
-		}
-		return list;
-	}
 
+		String result = bankAPI.getRealName(org_access_token);
+		// (List<String>) map.get("account_holder_name");
+		System.out.println("값: " + result);
+		return result;
+	}
 }
