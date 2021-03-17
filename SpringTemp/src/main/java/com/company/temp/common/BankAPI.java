@@ -1,7 +1,9 @@
 package com.company.temp.common;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -20,30 +22,40 @@ public class BankAPI {
 	// 이용기관코드
 	String user_ord_code = "M202111679";
 
-	// 사용자 정보 get
-	public Map<String, Object> getAccountList(String access_Token, String user_num) throws Exception {
+	// 사용자 이름의 계좌 조회
+	public Map<String, Object> getRealName(String access_Token, String user_num) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		String reqURL = host + "/v2.0/account/list";
-
-		StringBuilder qstr = new StringBuilder();
-		qstr.append("user_seq_no=" + user_num)//
-				.append("&include_cancel_yn=Y")//
-				.append("&sort_order=D");
+		String reqURL = host + "/v2.0/inquiry/real_name";
 		// 연결
-		URL url = new URL(reqURL + "?" + qstr);
+		URL url = new URL(reqURL);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
+		// post 요청
+		conn.setRequestMethod("POST");
+		conn.setDoOutput(true);
+
 		// 요청에 필요한 Header에 포함될 내용
 		conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+		conn.setRequestProperty("scope", "oob");
+		// POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+		StringBuilder sb = new StringBuilder();
+
+		// parameter 수정
+		sb.append("bank_tran_id=").append("M202111679U4BC34239Z")//
+				.append("&bank_code_std=").append("097")//
+				.append("&account_num=").append("1234567890123456")//
+				.append("&account_holder_info_type=").append(" ")//
+				.append("&account_holder_info=").append("880101")//
+				.append("&tran_dtime=").append("20210317101921");//
+		bw.write(sb.toString());
+		bw.flush();
 		// 출력되는 값이 200이면 정상작동
 		int responseCode = conn.getResponseCode();
 		System.out.println("responseCode : " + responseCode);
-
+		// 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
 		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
 		String line = "";
 		String result = "";
-
 		while ((line = br.readLine()) != null) {
 			result += line;
 		}

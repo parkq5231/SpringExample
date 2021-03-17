@@ -19,13 +19,14 @@ public class BankController {
 	@Autowired
 	BankAPI bankAPI;
 
-	@RequestMapping("/getAccountList")
-	public List<String> getAccountList(HttpSession session, Model model) throws Exception {
+	//실명확인
+	@RequestMapping("/getRealName")
+	public List<String> getRealName(HttpSession session, Model model) throws Exception {
 		List<String> list = new ArrayList<String>();
 		String user_num = "1100770536";
-		Map<String, Object> map = bankAPI.getAccountList(access_token, user_num);
+		Map<String, Object> map = bankAPI.getRealName(access_token, user_num);
 		System.out.println("map값 확인용" + map);
-		List<String> result = (List<String>) map.get("user_name");
+		List<String> result = (List<String>) map.get("account_holder_name");
 		for (String name : result) {
 			list.add(name);
 		}
